@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אלוף הפועל 🎯 | משחק תרגול והכנה לבגרות בלשון לכיתה י"א</title>
+    
+    <!-- Google Fonts: Assistant & Rubik -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Rubik:wght@500;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- סרגל עליון -->
+    <header class="app-header">
+        <div class="header-container">
+            <div class="header-brand">
+                <span class="brand-icon">⚡</span>
+                <div>
+                    <h1 class="brand-title">אַלּוּף הַפֹּעַל</h1>
+                    <span class="brand-subtitle">מערכת הפועל • הכנה אישית לבגרות בלשון</span>
+                </div>
+            </div>
+
+            <div class="header-actions">
+                <div class="hud-pill" title="ניקוד מצטבר">
+                    <span class="hud-icon">⭐</span>
+                    <span id="hud-score" class="hud-value">0</span>
+                    <span class="hud-label">XP</span>
+                </div>
+                <div class="hud-pill" title="רצף הצלחות">
+                    <span class="hud-icon">🔥</span>
+                    <span id="hud-streak" class="hud-value">0</span>
+                    <span class="hud-label">רצף</span>
+                </div>
+                <button id="sound-toggle-btn" class="icon-btn" title="השתק/הפעל צלילים">🔊</button>
+                <button id="open-rules-modal-btn" class="rules-btn" title="מדריך כללי הבגרות">
+                    <span>📚</span> כללי הבגרות
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <!-- ===================================================================
+             מסך 1: מסך פתיחה ובחירת מסלול (Welcome Screen)
+             =================================================================== -->
+        <section id="welcome-screen" class="game-screen active">
+            <div class="welcome-card hero-card">
+                <div class="welcome-header">
+                    <div class="welcome-badge">🎓 כיתה י"א • תיכון ברנר</div>
+                    <h2>מוכנים לכבוש את מערכת הפועל?</h2>
+                    <p class="welcome-desc">
+                        משחק תרגול חכם, אישי ומדויק לבגרות! המערכת תאבחן את רמתכם בכל הגזרות, תספק משוב מפורט ותבנה לכם אימון מותאם אישית המתמקד בדיוק בנושאים שאתם צריכים לחזק.
+                    </p>
+                </div>
+
+                <div class="student-name-box">
+                    <label for="student-name-input">שלום, איך קוראים לך?</label>
+                    <div class="input-inline">
+                        <input type="text" id="student-name-input" placeholder="הכנס/י את שמך כאן..." autocomplete="name">
+                    </div>
+                </div>
+
+                <div class="modes-grid">
+                    <!-- מסלול מומלץ: אבחון והתאמה אישית -->
+                    <div class="mode-card featured">
+                        <div class="featured-tag">מומלץ ביותר ⭐</div>
+                        <div class="mode-icon">🚀</div>
+                        <h3>מסלול אישי מותאם</h3>
+                        <p>
+                            מתחילים עם 7 פעלים מכל הגזרות, מקבלים דוח אבחון מפורט על נקודות החוזק והחולשה, וממשיכים לאימון חכם שמציג פעלים לפי מה שצריך לשפר!
+                        </p>
+                        <ul class="mode-perks">
+                            <li>✓ שלב אבחון מהיר (כל הגזרות)</li>
+                            <li>✓ דוח ביניים חכם עם טיפים ממוקדים</li>
+                            <li>✓ אימון אדפטיבי מבוסס ביצועים</li>
+                        </ul>
+                        <button id="start-diagnostic-btn" class="btn btn-primary btn-large">
+                            התחל מסלול אישי עכשיו ➜
+                        </button>
+                    </div>
+
+                    <!-- אימון ממוקד לפי גזרה -->
+                    <div class="mode-card">
+                        <div class="mode-icon">🎯</div>
+                        <h3>אימון ממוקד לפי גזרה</h3>
+                        <p>
+                            רוצים לחזק גזרה ספציפית? בחרו אחת מתוך 7 הגזרות (שלמים, מרובעים, חפ"ן, נל"י, נל"א, נפ"י/ו, נע"ו/י) ותרגלו רק אותה.
+                        </p>
+                        <button id="open-drill-modal-btn" class="btn btn-secondary">
+                            בחר גזרה לתרגול ➜
+                        </button>
+                    </div>
+                </div>
+
+                <!-- תגיות הגזרות הנכללות במבחן -->
+                <div class="curriculum-tags">
+                    <span class="tags-title">הגזרות למבחן:</span>
+                    <span class="tag">שְׁלֵמִים</span>
+                    <span class="tag">מְרֻבָּעִים</span>
+                    <span class="tag">חפ"ן</span>
+                    <span class="tag">נל"י/ה</span>
+                    <span class="tag">נל"א</span>
+                    <span class="tag">נפ"י/ו</span>
+                    <span class="tag">נע"ו/י</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================================================================
+             מסך 2: מסך המשחק / ניתוח הפועל (Play Screen)
+             =================================================================== -->
+        <section id="play-screen" class="game-screen">
+            <div class="play-container">
+                <!-- כותרת שלב ושליטה -->
+                <div class="stage-bar">
+                    <div class="stage-info">
+                        <span id="question-stage-indicator" class="stage-title">שאלה בתרגול</span>
+                    </div>
+                    <button class="btn-go-home text-btn" title="חזרה לתפריט הראשי">✕ יציאה לתפריט</button>
+                </div>
+
+                <!-- כרטיס הפועל המרכזי -->
+                <div class="verb-card">
+                    <div class="verb-top-meta">
+                        <span id="gzira-hint-pill" class="gzira-pill">גזרת הפועל</span>
+                    </div>
+
+                    <div class="target-verb-wrapper">
+                        <span id="target-verb-display" class="target-verb-text">הִתְכַּתַּבְנוּ</span>
+                    </div>
+
+                    <div id="target-sentence-display" class="target-sentence-text">
+                        (אֲנַחְנוּ) הִתְכַּתַּבְנוּ בְּמֶשֶׁךְ שָׁנִים אֲרֻכּוֹת.
+                    </div>
+                </div>
+
+                <!-- טופס הניתוח המלא -->
+                <div class="analysis-form-card">
+                    <div class="form-grid">
+                        
+                        <!-- 1. שורש (הקלדה עצמית - לא רב ברירתי!) -->
+                        <div class="form-field-group">
+                            <label for="root-input" class="field-label">
+                                <span class="label-number">1</span>
+                                שוֹרֶשׁ <span class="field-req">*הקלדה עצמית</span>
+                            </label>
+                            <div class="input-with-icon">
+                                <input type="text" id="root-input" placeholder="הקלד/י שורש (לדוגמה: כ-ת-ב או כתב)" autocomplete="off">
+                            </div>
+                            <div id="root-feedback-msg" class="field-validation-msg"></div>
+                        </div>
+
+                        <!-- 2. בניין (בחירה מתוך 7 הבניינים) -->
+                        <div class="form-field-group">
+                            <label class="field-label">
+                                <span class="label-number">2</span>
+                                בִּנְיָן <span class="field-req">*בחירה</span>
+                            </label>
+                            <div id="binyan-chips-container" class="chips-row">
+                                <!-- נטען דינמית ב-JS -->
+                            </div>
+                        </div>
+
+                        <!-- 3. זמן (עבר / בינוני / עתיד / ציווי) -->
+                        <div class="form-field-group">
+                            <label class="field-label">
+                                <span class="label-number">3</span>
+                                זְמַן <span class="field-req">*בינוני / עבר / עתיד / ציווי</span>
+                            </label>
+                            <div id="tense-chips-container" class="chips-row">
+                                <!-- נטען דינמית ב-JS -->
+                            </div>
+                        </div>
+
+                        <!-- 4. גוף (מדבר, נוכח, נסתר...) -->
+                        <div class="form-field-group">
+                            <label for="person-select" class="field-label">
+                                <span class="label-number">4</span>
+                                גּוּף <span class="field-req">*מדבר, נוכח, נסתר...</span>
+                            </label>
+                            <div class="select-wrapper">
+                                <select id="person-select">
+                                    <!-- נטען דינמית ב-JS -->
+                                </select>
+                            </div>
+                            <div id="person-feedback-msg" class="field-validation-msg"></div>
+                        </div>
+
+                        <!-- 5. שם פועל (הקלדה עצמית!) -->
+                        <div class="form-field-group">
+                            <label for="infinitive-input" class="field-label">
+                                <span class="label-number">5</span>
+                                שֵׁם פֹּעַל <span class="field-req">*הקלדה (למשל: לִכְתֹּב / לכתוב)</span>
+                            </label>
+                            <div class="input-with-icon">
+                                <input type="text" id="infinitive-input" placeholder="הקלד/י שם פועל..." autocomplete="off">
+                            </div>
+                            <div id="infinitive-feedback-msg" class="field-validation-msg"></div>
+                        </div>
+
+                        <!-- 6. שם פעולה (הקלדה עצמית!) -->
+                        <div class="form-field-group">
+                            <label for="verbal-noun-input" class="field-label">
+                                <span class="label-number">6</span>
+                                שֵׁם פְּעֻלָּה <span class="field-req">*הקלדה (למשל: כְּתִיבָה / כתיבה)</span>
+                            </label>
+                            <div class="input-with-icon">
+                                <input type="text" id="verbal-noun-input" placeholder="הקלד/י שם פעולה..." autocomplete="off">
+                            </div>
+                            <div id="verbal-noun-feedback-msg" class="field-validation-msg"></div>
+                        </div>
+
+                    </div>
+
+                    <!-- אזור פעולות: כפתור בדיקה / כפתור הבא -->
+                    <div class="form-actions">
+                        <button id="check-btn" class="btn btn-primary btn-check">
+                            <span>בְּדֹק תְּשׁוּבָה</span> ✓
+                        </button>
+                        <button id="next-btn" class="btn btn-success btn-next" style="display: none;">
+                            <span>לַשְּׁאֵלָה הַבָּאָה</span> ➜
+                        </button>
+                    </div>
+                </div>
+
+                <!-- אזור הסבר דקדוקי מורחב (מופיע לאחר בדיקה) -->
+                <div id="explanation-wrapper" class="explanation-container" style="display: none;">
+                    <div id="explanation-modal-content"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================================================================
+             מסך 3: דוח משוב ביניים אישי (Diagnostic Summary Screen)
+             =================================================================== -->
+        <section id="summary-screen" class="game-screen">
+            <div class="summary-card">
+                <div class="summary-header">
+                    <div class="summary-badge">🎯 תוצאות שלב האבחון</div>
+                    <h2>הדוח האישי של <span id="summary-student-name">תלמיד</span></h2>
+                    <p class="summary-sub">
+                        סיימת בהצלחה את סבב האבחון הראשון! הנה מפת השליטה המדויקת שלך לקראת המבחן:
+                    </p>
+                    <div class="overall-score-pill">
+                        ניקוד שנצבר: <strong id="summary-overall-score">0 XP</strong>
+                    </div>
+                </div>
+
+                <div class="summary-grid">
+                    <!-- עמודת חוזקות -->
+                    <div class="summary-col strengths-col">
+                        <div class="col-title">
+                            <span class="icon">⭐</span>
+                            <h3>נקודות חוזק מרשימות</h3>
+                        </div>
+                        <div id="summary-strengths" class="summary-list"></div>
+                    </div>
+
+                    <!-- עמודת נושאים לחיזוק -->
+                    <div class="summary-col weaknesses-col">
+                        <div class="col-title">
+                            <span class="icon">🎯</span>
+                            <h3>נושאים לחיזוק ותרגול ממוקד</h3>
+                        </div>
+                        <div id="summary-weaknesses" class="summary-list"></div>
+                    </div>
+                </div>
+
+                <!-- פסי התקדמות לפי גזרה -->
+                <div class="progress-breakdown-card">
+                    <h3>רמת שליטה לפי גזרות:</h3>
+                    <div id="summary-progress-bars" class="bars-container"></div>
+                </div>
+
+                <!-- כפתור מעבר לאימון מותאם אישית -->
+                <div class="summary-action-box">
+                    <button id="start-adaptive-from-summary-btn" class="btn btn-primary btn-large glow-btn">
+                        <span>בוא נתרגל את מה שצריך לחזק!</span> 🚀
+                    </button>
+                    <button class="btn-go-home btn btn-outline">
+                        חזרה למסך הבית
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- =======================================================================
+         מודאל 1: בחירת גזרה לאימון ממוקד (Drill Modal)
+         ======================================================================= -->
+    <div id="drill-modal" class="modal-backdrop">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>🎯 בחירת גזרה לתרגול ממוקד</h3>
+                <button class="modal-close-btn" title="סגור">✕</button>
+            </div>
+            <p class="modal-intro">
+                בחרו את הגזרה שתרצו לתרגל כדי לחזק את המיומנות והביטחון שלכם בה:
+            </p>
+            <div id="drill-gzarot-grid" class="gzarot-selection-grid"></div>
+        </div>
+    </div>
+
+    <!-- =======================================================================
+         מודאל 2: ספר כללי הבגרות והטיפים (Rules Modal)
+         ======================================================================= -->
+    <div id="rules-modal" class="modal-backdrop">
+        <div class="modal-card large">
+            <div class="modal-header">
+                <h3>📚 כללי הזהב של מערכת הפועל לבגרות בלשון</h3>
+                <button class="modal-close-btn" title="סגור">✕</button>
+            </div>
+            <div class="modal-body rules-content">
+                
+                <!-- כלל 1: ששת שורשי היו"ד בנע"ו/י -->
+                <div class="rule-highlight-box important">
+                    <h4>⭐ כלל הברזל של גזרת נע"ו/י (ע"ו/י):</h4>
+                    <p>
+                        בגזרת נע"ו/י, אות השורש האמצעית בעי"ן הפועל היא <strong>וָ"ו</strong> (קו"ם, רו"ץ, בו"ן, שו"ב...),
+                        <strong>למעט 6 שורשי היו"ד הבאים בלבד:</strong>
+                    </p>
+                    <div class="roots-pills-row">
+                        <span class="root-pill">רִי"ב</span>
+                        <span class="root-pill">שִׁי"ר</span>
+                        <span class="root-pill">גִּי"ל</span>
+                        <span class="root-pill">שִׂי"ם</span>
+                        <span class="root-pill">שִׂי"ח</span>
+                        <span class="root-pill">קִי"א</span>
+                    </div>
+                    <small>כל שאר פועלי נע"ו/י נכתבים עם ו' בשורש (למשל: מֵבִין שורשו ב-ו-ן!).</small>
+                </div>
+
+                <!-- כלל 2: חפ"ן -->
+                <div class="rule-highlight-box">
+                    <h4>🔍 איך מזהים חפ"ן (חסרי פ"נ)?</h4>
+                    <p>
+                        חפשו <strong>דגש חזק משלים</strong> בעין הפועל שנוצר כתוצאה מהיעלמות הנו"ן.
+                    </p>
+                    <ul>
+                        <li><strong>יַפִּיל</strong> = יַנְפִּיל במקור &larr; שורש נ-פ-ל (בניין הפעיל).</li>
+                        <li><strong>הִצַּלְנוּ</strong> = הִנְצַלְנוּ במקור &larr; שורש נ-צ-ל (בניין הפעיל).</li>
+                        <li><strong>תִּגַּשׁ</strong> = תִּנְגַּשׁ במקור &larr; שורש נ-ג-ש (בניין פעל).</li>
+                    </ul>
+                </div>
+
+                <!-- כלל 3: נל"י מול נל"א -->
+                <div class="rule-highlight-box">
+                    <h4>⚖️ נל"י מול נל"א:</h4>
+                    <ul>
+                        <li><strong>נל"י (נחי ל"י/ה):</strong> מסתיים בשם פועל ב-וֹת (לִבְנוֹת, לְגַלּוֹת), עבר מסתיים ב-ָה או ִיתִי. השורש נכתב תמיד עם י' בסוף (ב-נ-י, ר-א-י, ק-נ-י).</li>
+                        <li><strong>נל"א (נחי ל"א):</strong> האל"ף אינה נושרת אלא שותקת ונחה (מָצָא, קָרָא, מִלֵּא). השורש נכתב תמיד עם א' (מ-צ-א, ק-ר-א).</li>
+                    </ul>
+                </div>
+
+                <!-- כלל 4: נפ"י/ו -->
+                <div class="rule-highlight-box">
+                    <h4>💡 נפ"י/ו:</h4>
+                    <p>
+                        תחילית <strong>הוֹ-</strong> בבניין הפעיל (הוֹרִיד, הוֹשִׁיב, הוֹדִיעַ) או <strong>נוֹ-</strong> בנפעל (נוֹלַד, נוֹדַע) מעידה על פ"א הפועל שהיא י' מקורית!
+                    </p>
+                </div>
+
+                <!-- כלל 5: מרובעים -->
+                <div class="rule-highlight-box">
+                    <h4>🔲 מרובעים:</h4>
+                    <p>
+                        לשורש יש 4 אותיות (פ-ר-ס-ם, ע-ד-כ-ן, ב-ל-ב-ל, א-ר-ג-ן). הפעלים נוטים אך ורק בבניינים הכבדים: <strong>פיעל, פועל והתפעל</strong>!
+                    </p>
+                </div>
+
+                <!-- כלל 6: זמנים וציווי -->
+                <div class="rule-highlight-box">
+                    <h4>⏱️ זמנים במערכת הפועל:</h4>
+                    <ul>
+                        <li><strong>עבר</strong> - פעולה שהסתיימה (שָׁמַרְתִּי, הִסְבִּיר).</li>
+                        <li><strong>בינוני</strong> - במקום "הווה", משמש גם כפועל וגם כשם תואר (מַסְבִּיר, שׁוֹמֵר).</li>
+                        <li><strong>עתיד</strong> - פעולה שתתרחש, מתאפיינת באותיות אית"ן (אֶשְׁמֹר, תִּשְׁמְרוּ).</li>
+                        <li><strong>ציווי</strong> - פנייה ישירה לנוכח/נוכחת/נוכחים/נוכחות לבצע פעולה (שְׁמֹר! כִּתְבוּ! סַע! קוּם!).</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- סקריפטים -->
+    <script src="verbsData.js"></script>
+    <script src="sound.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
