@@ -59,7 +59,7 @@ const gameState = {
 };
 
 // -----------------------------------------------------------------------------
-// פונקציות עזר לנרמול טקסט (הסרת ניקוד, גרשיים, רווחים)
+// פונקציות עזר לנרמול טקסט והשוואת אמות קריאה (כתיב מלא/חסר, יו"ד/ו"ו)
 // -----------------------------------------------------------------------------
 
 function stripNiqqud(str) {
@@ -67,20 +67,98 @@ function stripNiqqud(str) {
     return str.replace(/[\u0591-\u05C7]/g, "").trim();
 }
 
-function normalizeRoot(str) {
+function normalizeHebrewWord(str) {
     if (!str) return "";
     let clean = stripNiqqud(str);
-    // הסרת גרשיים, מרכאות, מקפים, נקודות, רווחים
+    // הסרת פיסוק, גרשיים, מקפים, נקודות, רווחים
     clean = clean.replace(/[\s\-\.\'\"\״\׳\,]/g, "");
-    // החלפת אותיות סופיות באותיות רגילות להשוואה מדויקת (או השוואה ישירה)
+    // החלפת אותיות סופיות באותיות רגילות להשוואה אמינה
+    clean = clean.replace(/ך/g, "כ")
+                 .replace(/ם/g, "מ")
+                 .replace(/ן/g, "נ")
+                 .replace(/ף/g, "פ")
+                 .replace(/ץ/g, "צ");
     return clean;
 }
 
+function normalizeRoot(str) {
+    return normalizeHebrewWord(str);
+}
+
 function normalizeWord(str) {
-    if (!str) return "";
-    let clean = stripNiqqud(str);
-    clean = clean.replace(/[\s\-\.\'\"\״\׳]/g, "");
-    return clean;
+    return normalizeHebrewWord(str);
+}
+
+/**
+ * השוואה גמישה של מילים בעברית המתחשבת בכתיב חסר ניקוד (אמות קריאה):
+ * - קנייה / קניה (יו"ד כפולה או יחידה)
+ * - לקרוא / לקרא (ו' חולם/שורוק)
+ * - למצוא / למצא
+ * - לשמור / לשמר
+ * - סידור / סדור
+ * - לימוד / למוד
+ * - להיוולד / להולד
+ * - התעניינות / התענינות
+ * - עם או בלי ל' תחילית בשם פועל (למשל 'לכתוב' או 'כתוב')
+ */
+function matchFlexibleHebrew(userWord, targetWord, alternateList = []) {
+    if (!userWord) return false;
+    
+    const uNorm = normalizeHebrewWord(userWord);
+    if (!uNorm) return false;
+
+    // רשימת כל צורות המטרה האפשריות
+    const allTargets = [targetWord, ...(alternateList || [])].map(t => normalizeHebrewWord(t)).filter(Boolean);
+
+    // 1. התאמה ישירה מדויקת (לאחר הסרת ניקוד ואותיות סופיות)
+    if (allTargets.includes(uNorm)) return true;
+
+    // פונקציות טרנספורמציה לאמות קריאה:
+    // א. כיווץ י' כפולה ו-ו' כפולה: קנייה -> קניה, התעניינות -> התענינות, קיווי -> קווי
+    const collapseDuplicates = (s) => s.replace(/יי+/g, "י").replace(/וו+/g, "ו");
+
+    // ב. הסרת ו' שאינה אות ראשונה (חולם/שורוק מלא מול חסר: לקרוא -> לקרא, לשמור -> לשמר)
+    const stripInternalVav = (s) => s.length > 2 ? s[0] + s.slice(1).replace(/ו/g, "") : s;
+
+    // ג. הסרת י' שאינה אות ראשונה (חיריק מלא מול חסר: סידור -> סדור, לימוד -> למוד, מילוי -> מלוי)
+    const stripInternalYod = (s) => s.length > 2 ? s[0] + s.slice(1).replace(/י/g, "") : s;
+
+    // ד. הסרת ל' תחילית (אם התלמיד כתב 'שמור' במקום 'לשמור' או 'קרוא' במקום 'לקרוא')
+    const stripPrefixLamed = (s) => (s.startsWith("ל") && s.length > 3) ? s.slice(1) : s;
+
+    // יצירת מגוון וריאציות אפשריות למילה
+    const generateVariants = (word) => {
+        const v = new Set();
+        const base = normalizeHebrewWord(word);
+        if (!base) return [];
+        v.add(base);
+        v.add(collapseDuplicates(base));
+        v.add(stripInternalVav(base));
+        v.add(stripInternalVav(collapseDuplicates(base)));
+        v.add(stripInternalYod(base));
+        v.add(stripInternalYod(collapseDuplicates(base)));
+        v.add(stripInternalYod(stripInternalVav(collapseDuplicates(base))));
+        return Array.from(v);
+    };
+
+    const userVariants = new Set();
+    generateVariants(uNorm).forEach(x => userVariants.add(x));
+    generateVariants(stripPrefixLamed(uNorm)).forEach(x => userVariants.add(x));
+
+    for (const target of allTargets) {
+        const targetVariants = new Set();
+        generateVariants(target).forEach(x => targetVariants.add(x));
+        generateVariants(stripPrefixLamed(target)).forEach(x => targetVariants.add(x));
+
+        // בדיקת חפיפה בין וריאציות המשתמש לווריאציות המטרה
+        for (const uv of userVariants) {
+            if (targetVariants.has(uv)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 // -----------------------------------------------------------------------------
@@ -295,7 +373,7 @@ function pickNextAdaptiveVerb() {
     const chosen = (filtered.length > 0 ? filtered : availableVerbs)[Math.floor(Math.random() * (filtered.length > 0 ? filtered.length : availableVerbs.length))];
 
     const currentGziraMastery = getGziraMasteryPercent(chosenGzira);
-    loadQuestion(chosen, `אימון מותאם אישית • ${GZAROT_INFO[chosenGzira].badge} (רמת שליטה: ${currentGziraMastery}%)`);
+    loadQuestion(chosen, `אימון מותאם אישית • שאלה ${gameState.totalAnswered + 1}`);
 }
 
 function getGziraMasteryPercent(gziraKey) {
@@ -312,20 +390,17 @@ function loadQuestion(verbObj, headerText) {
     gameState.currentVerb = verbObj;
     resetQuestionForm();
 
-    document.getElementById("question-stage-indicator").textContent = headerText;
-    document.getElementById("target-verb-display").textContent = verbObj.verb;
-    document.getElementById("target-sentence-display").textContent = verbObj.sentence;
-
-    const gziraPill = document.getElementById("gzira-hint-pill");
-    const gziraData = GZAROT_INFO[verbObj.gzira];
-    gziraPill.textContent = gziraData.badge;
-    gziraPill.style.backgroundColor = `${gziraData.color}20`;
-    gziraPill.style.color = gziraData.color;
-    gziraPill.style.borderColor = gziraData.color;
+    const stageInd = document.getElementById("question-stage-indicator");
+    if (stageInd) stageInd.textContent = headerText;
+    const targetVerb = document.getElementById("target-verb-display");
+    if (targetVerb) targetVerb.textContent = verbObj.verb;
+    const targetSent = document.getElementById("target-sentence-display");
+    if (targetSent) targetSent.textContent = verbObj.sentence;
 
     // התמקדות ראשונית בתיבת השורש
     setTimeout(() => {
-        document.getElementById("root-input").focus();
+        const rootInput = document.getElementById("root-input");
+        if (rootInput) rootInput.focus();
     }, 150);
 }
 
@@ -431,17 +506,13 @@ function checkCurrentAnswers() {
         results.person = true;
     }
 
-    // 5. בדיקת שם פועל
-    const normUserInf = normalizeWord(userInfinitive);
-    const normCorrectInf = normalizeWord(verb.infinitive);
-    if (normUserInf === normCorrectInf || (normUserInf && normCorrectInf.endsWith(normUserInf))) {
+    // 5. בדיקת שם פועל (אימות גמיש לפי אמות קריאה: יו"ד, ו"ו, כתיב מלא וחסר)
+    if (matchFlexibleHebrew(userInfinitive, verb.infinitive, verb.acceptedInfinitives)) {
         results.infinitive = true;
     }
 
-    // 6. בדיקת שם פעולה
-    const normUserVN = normalizeWord(userVerbalNoun);
-    const normCorrectVN = normalizeWord(verb.verbalNoun);
-    if (normUserVN === normCorrectVN || (normUserVN && normCorrectVN.includes(normUserVN))) {
+    // 6. בדיקת שם פעולה (אימות גמיש לפי אמות קריאה: למשל קניה / קנייה, סידור / סדור)
+    if (matchFlexibleHebrew(userVerbalNoun, verb.verbalNoun, verb.acceptedVerbalNouns)) {
         results.verbalNoun = true;
     }
 
