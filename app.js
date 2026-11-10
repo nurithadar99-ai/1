@@ -116,8 +116,10 @@ function loadSavedState() {
     }
 
     if (gameState.studentName) {
-        document.getElementById("student-name-input").value = gameState.studentName;
-        document.getElementById("welcome-banner-name").textContent = gameState.studentName;
+        const nameInput = document.getElementById("student-name-input");
+        if (nameInput) nameInput.value = gameState.studentName;
+        const banner = document.getElementById("welcome-banner-name");
+        if (banner) banner.textContent = gameState.studentName;
     }
 }
 
@@ -207,9 +209,11 @@ function showScreen(screenId) {
 }
 
 function startDiagnosticMode() {
-    const nameInput = document.getElementById("student-name-input").value.trim();
-    gameState.studentName = nameInput || "תלמיד/ה";
-    document.getElementById("welcome-banner-name").textContent = gameState.studentName;
+    const nameInput = document.getElementById("student-name-input");
+    const nameVal = nameInput ? nameInput.value.trim() : "";
+    gameState.studentName = nameVal || "תלמיד/ה";
+    const banner = document.getElementById("welcome-banner-name");
+    if (banner) banner.textContent = gameState.studentName;
     saveState();
 
     gameState.mode = "diagnostic";
