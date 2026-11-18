@@ -9,6 +9,7 @@
 const GZAROT_INFO = {
     shlemim: {
         id: "shlemim",
+        difficulty: 2,
         name: "שלמים",
         badge: "גזרת השלמים",
         color: "#3b82f6",
@@ -84,6 +85,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "shlemim_2",
+        difficulty: 1,
         verb: "תִּשְׁמְרוּ",
         sentence: "(אַתֶּם) תִּשְׁמְרוּ עַל הַכְּלָלִים בְּקַפְדָנוּת.",
         gzira: "shlemim",
@@ -97,6 +99,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "shlemim_3",
+        difficulty: 1,
         verb: "מַסְבִּירָה",
         sentence: "(הִיא) מַסְבִּירָה אֶת הַחֹמֶר בִּבְהִירוּת רַבָּה.",
         gzira: "shlemim",
@@ -110,6 +113,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "shlemim_4",
+        difficulty: 1,
         verb: "נִכְנַסְתָּ",
         sentence: "(אַתָּה) נִכְנַסְתָּ לַכִּתָּה בְּדִיּוּק בַּזְּמַן.",
         gzira: "shlemim",
@@ -123,6 +127,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "shlemim_5",
+        difficulty: 1,
         verb: "סִדַּרְתִּי",
         sentence: "(אֲנִי) סִדַּרְתִּי אֶת שֻׁלְחַן הָעֲבוֹדָה שֶׁלִּי.",
         gzira: "shlemim",
@@ -136,6 +141,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "shlemim_6",
+        difficulty: 1,
         verb: "כִּתְבוּ!",
         sentence: "(אַתֶּם) כִּתְבוּ אֶת כָּל הַתְּשׁוּבוֹת בַּמַּחְבֶּרֶת!",
         gzira: "shlemim",
@@ -149,6 +155,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "shlemim_7",
+        difficulty: 2,
         verb: "שַׁמְּרִי!",
         sentence: "(אַתְּ) שַׁמְּרִי עַל הַהֶשֵּׂגִים הַיָּפִים שֶׁלָּךְ!",
         gzira: "shlemim",
@@ -162,6 +169,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "shlemim_8",
+        difficulty: 2,
         verb: "יִתְרַגְּשׁוּ",
         sentence: "(הֵם) יִתְרַגְּשׁוּ מְאֹד כְּשֶׁיִּשְׁמְעוּ אֶת הַבְּשׂוֹרָה.",
         gzira: "shlemim",
@@ -175,6 +183,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "shlemim_9",
+        difficulty: 2,
         verb: "מְלַמְּדוֹת",
         sentence: "(הֵן) מְלַמְּדוֹת לָשׁוֹן עִבְרִית בִּתְשׁוּקָה רַבָּה.",
         gzira: "shlemim",
@@ -188,6 +197,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "shlemim_10",
+        difficulty: 2,
         verb: "פְּתַח!",
         sentence: "(אַתָּה) פְּתַח אֶת הַחַלּוֹן כְּדֵי שֶׁיִּכָּנֵס אֲוִיר!",
         gzira: "shlemim",
@@ -205,6 +215,7 @@ const VERBS_DATABASE = [
     // -------------------------------------------------------------------------
     {
         id: "merubaim_1",
+        difficulty: 2,
         verb: "פִּרְסַמְתֶּם",
         sentence: "(אַתֶּם) פִּרְסַמְתֶּם מַאֲמָר מַרְתֵּק בְּעִתּוֹן בֵּית הַסֵּפֶר.",
         gzira: "merubaim",
@@ -218,6 +229,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "merubaim_2",
+        difficulty: 2,
         verb: "מִתְבַּלְבֵּל",
         sentence: "(הוּא) מִתְבַּלְבֵּל בֵּין הַמֻּשָּׂגִים הַשּׁוֹנִים.",
         gzira: "merubaim",
@@ -231,6 +243,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "merubaim_3",
+        difficulty: 3,
         verb: "עַדְכְּנִי!",
         sentence: "(אַתְּ) עַדְכְּנִי אוֹתָנוּ מִיָּד כְּשֶׁתַּגִּיעִי!",
         gzira: "merubaim",
@@ -244,6 +257,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "merubaim_4",
+        difficulty: 2,
         verb: "נְאַרְגֵּן",
         sentence: "(אֲנַחְנוּ) נְאַרְגֵּן אֶת טֶקֶס יוֹם הַזִּכָּרוֹן.",
         gzira: "merubaim",
@@ -257,6 +271,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "merubaim_5",
+        difficulty: 3,
         verb: "תִּזְמַנְתִּי",
         sentence: "(אֲנִי) תִּזְמַנְתִּי אֶת שְׁעוֹן הָעֵצֶר שֶׁל הַנִּסּוּי.",
         gzira: "merubaim",
@@ -270,6 +285,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "merubaim_6",
+        difficulty: 3,
         verb: "מְסַרְבְּלִים",
         sentence: "(הֵם) מְסַרְבְּלִים אֶת כָּל הַתַּהֲלִיךְ לְלֹא צֹרֶךְ.",
         gzira: "merubaim",
@@ -283,6 +299,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "merubaim_7",
+        difficulty: 2,
         verb: "הִתְעַנְיְנָה",
         sentence: "(הִיא) הִתְעַנְיְנָה מְאֹד בְּתַכְנִית הַלִּמּוּדִים הַחֲדָשָׁה.",
         gzira: "merubaim",
@@ -296,6 +313,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "merubaim_8",
+        difficulty: 3,
         verb: "תַּרְגְּמוּ!",
         sentence: "(אַתֶּם) תַּרְגְּמוּ אֶת הַפִּסְקָה הַבָּאָה לְעִבְרִית!",
         gzira: "merubaim",
@@ -313,6 +331,7 @@ const VERBS_DATABASE = [
     // -------------------------------------------------------------------------
     {
         id: "hafan_1",
+        difficulty: 1,
         verb: "יַפִּיל",
         sentence: "(הוּא) יַפִּיל אֶת הַחוֹמָה הַבְּצוּרָה.",
         gzira: "hafan",
@@ -326,6 +345,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "hafan_2",
+        difficulty: 2,
         verb: "הַסִּיעִי!",
         sentence: "(אַתְּ) הַסִּיעִי אֶת הַיְּלָדִים לַחוּג בַּבֹּקֶר!",
         gzira: "hafan",
@@ -339,6 +359,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "hafan_3",
+        difficulty: 2,
         verb: "מַבִּיטִים",
         sentence: "(הֵם) מַבִּיטִים בַּשָּׁמַיִם הַזַּכִּים.",
         gzira: "hafan",
@@ -352,6 +373,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "hafan_4",
+        difficulty: 1,
         verb: "הִצַּלְנוּ",
         sentence: "(אֲנַחְנוּ) הִצַּלְנוּ אֶת הַגּוּר מֵהַבּוֹר.",
         gzira: "hafan",
@@ -365,6 +387,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "hafan_5",
+        difficulty: 2,
         verb: "תִּגְּשׁוּ",
         sentence: "(אַתֶּם) תִּגְּשׁוּ לַמִּזְכִירוּת כְּדֵי לְהֵרָשֵׁם.",
         gzira: "hafan",
@@ -378,6 +401,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "hafan_6",
+        difficulty: 3,
         verb: "הַגִּישׁוּ!",
         sentence: "(אַתֶּם) הַגִּישׁוּ אֶת עֲבוֹדוֹת הַגְּמָר בַּזְּמַן!",
         gzira: "hafan",
@@ -391,6 +415,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "hafan_7",
+        difficulty: 2,
         verb: "תִּתֵּן",
         sentence: "(אַתָּה) תִּתֵּן לוֹ עֵצָה טוֹבָה כְּשֶׁיְּבַקֵּשׁ.",
         gzira: "hafan",
@@ -404,6 +429,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "hafan_8",
+        difficulty: 2,
         verb: "נִצַּלְתָּ",
         sentence: "(אַתָּה) נִצַּלְתָּ מִתְּאוּנָה מְסֻכֶּנֶת בְּנֵס.",
         gzira: "hafan",
@@ -417,6 +443,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "hafan_9",
+        difficulty: 2,
         verb: "מַכִּירָה",
         sentence: "(הִיא) מַכִּירָה אֶת הַכְּלָלִים הֵיטֵב.",
         gzira: "hafan",
@@ -430,6 +457,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "hafan_10",
+        difficulty: 3,
         verb: "סַע!",
         sentence: "(אַתָּה) סַע בִּזְהִירוּת רַבָּה בִּתְנָאֵי עֲרָפֶל!",
         gzira: "hafan",
@@ -447,6 +475,7 @@ const VERBS_DATABASE = [
     // -------------------------------------------------------------------------
     {
         id: "naly_1",
+        difficulty: 1,
         verb: "בָּנוּ",
         sentence: "(הֵם) בָּנוּ גֶּשֶׁר מַרְשִׁים מֵעַל הַנָּהָר.",
         gzira: "naly",
@@ -460,6 +489,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "naly_2",
+        difficulty: 1,
         verb: "תִּקְנִי",
         sentence: "(אַתְּ) תִּקְנִי כַּרְטִיסִים לַמּוֹפָע בְּעוֹד מוֹעֵד.",
         gzira: "naly",
@@ -473,6 +503,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "naly_3",
+        difficulty: 2,
         verb: "מְגַלִּים",
         sentence: "(אֲנַחְנוּ) מְגַלִּים מְקוֹמוֹת חֲדָשִׁים בְּכָל שָׁבוּעַ.",
         gzira: "naly",
@@ -486,6 +517,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "naly_4",
+        difficulty: 3,
         verb: "קַוֵּה!",
         sentence: "(אַתָּה) קַוֵּה לַטּוֹב בְּיוֹתֵר וְהִתְכּוֹנֵן לַכֹּל!",
         gzira: "naly",
@@ -500,6 +532,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "naly_5",
+        difficulty: 2,
         verb: "הִפְנֵיתִי",
         sentence: "(אֲנִי) הִפְנֵיתִי אֶת הַשְּׁאֵלָה לַמְּנַהֵל.",
         gzira: "naly",
@@ -513,6 +546,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "naly_6",
+        difficulty: 2,
         verb: "נִרְאֶה",
         sentence: "(הוּא) נִרְאֶה שָׂמֵחַ וּמְלֵא מֶרֶץ הַבֹּקֶר.",
         gzira: "naly",
@@ -526,6 +560,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "naly_7",
+        difficulty: 2,
         verb: "נִסּוּ",
         sentence: "(הֵם) נִסּוּ כָּל פִּתְרוֹן אֶפְשָׁרִי לַבְּעָיָה.",
         gzira: "naly",
@@ -539,6 +574,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "naly_8",
+        difficulty: 3,
         verb: "עֲנֵה!",
         sentence: "(אַתָּה) עֲנֵה עַל הַשְּׁאֵלוֹת לְלֹא הִסּוּס!",
         gzira: "naly",
@@ -553,6 +589,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "naly_9",
+        difficulty: 2,
         verb: "הִשְׁתַּנִּיתֶם",
         sentence: "(אַתֶּם) הִשְׁתַּנִּיתֶם מְאֹד מֵאָז הַפְּגִישָׁה הַקּוֹדֶמֶת.",
         gzira: "naly",
@@ -566,6 +603,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "naly_10",
+        difficulty: 3,
         verb: "פְּנוּ!",
         sentence: "(אַתֶּם) פְּנוּ לַשֵּׁרוּת הַטֶּכְנִי לְקַבָּלַת סִיּוּעַ!",
         gzira: "naly",
@@ -583,6 +621,7 @@ const VERBS_DATABASE = [
     // -------------------------------------------------------------------------
     {
         id: "nala_1",
+        difficulty: 1,
         verb: "מָצָאתִי",
         sentence: "(אֲנִי) מָצָאתִי אֶת הַפִּתְרוֹן הַנָּכוֹן לַחִידָה.",
         gzira: "nala",
@@ -596,6 +635,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "nala_2",
+        difficulty: 1,
         verb: "תִּקְרְאוּ",
         sentence: "(אַתֶּם) תִּקְרְאוּ אֶת כָּל הַהַנְחָיוֹת בְּעִיּוּן רַב.",
         gzira: "nala",
@@ -609,6 +649,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "nala_3",
+        difficulty: 2,
         verb: "הֶחְבֵּאתֶם",
         sentence: "(אַתֶּם) הֶחְבֵּאתֶם אֶת הַמַּתָּנָה מֵאַחֲרֵי הַסַּפָּה.",
         gzira: "nala",
@@ -622,6 +663,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "nala_4",
+        difficulty: 2,
         verb: "מְרַפֵּא",
         sentence: "(הוּא) מְרַפֵּא אֶת הַפְּצוּעִים בְּמִרְפָּאַת הַשָּׂדֶה.",
         gzira: "nala",
@@ -635,6 +677,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "nala_5",
+        difficulty: 2,
         verb: "קְרָא!",
         sentence: "(אַתָּה) קְרָא בְּקוֹל רָם וּבָרוּר לִפְנֵי כֻּלָּם!",
         gzira: "nala",
@@ -648,6 +691,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "nala_6",
+        difficulty: 2,
         verb: "הִתְפַּלֵּאתִי",
         sentence: "(אֲנִי) הִתְפַּלֵּאתִי מֵהַיְּכֹלֶת הַגְּבוֹהָה שֶׁהֻפְגְּנָה.",
         gzira: "nala",
@@ -661,6 +705,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "nala_7",
+        difficulty: 2,
         verb: "מִלֵּאתָ",
         sentence: "(אַתָּה) מִלֵּאתָ אֶת כָּל הַדְּרִישׁוֹת בְּהַצְלָחָה.",
         gzira: "nala",
@@ -674,6 +719,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "nala_8",
+        difficulty: 3,
         verb: "הַמְצִיאִי!",
         sentence: "(אַתְּ) הַמְצִיאִי שִׁיטַת עֲבוֹדָה יְעִילָה יוֹתֵר!",
         gzira: "nala",
@@ -691,6 +737,7 @@ const VERBS_DATABASE = [
     // -------------------------------------------------------------------------
     {
         id: "nafy_1",
+        difficulty: 1,
         verb: "הוֹרִיד",
         sentence: "(הוּא) הוֹרִיד אֶת הָאַרְגָּזִים הַכְּבֵדִים מֵהַמַּשָּׂאִית.",
         gzira: "nafy",
@@ -704,6 +751,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "nafy_2",
+        difficulty: 1,
         verb: "תֵּשְׁבוּ",
         sentence: "(אַתֶּם) תֵּשְׁבוּ סְבִיב הַשֻּׁלְחָן וְנַתְחִיל בַּדִּיּוּן.",
         gzira: "nafy",
@@ -717,6 +765,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "nafy_3",
+        difficulty: 2,
         verb: "נוֹלַדְתִּי",
         sentence: "(אֲנִי) נוֹלַדְתִּי בְּעִיר הַבִּירָה יְרוּשָׁלַיִם.",
         gzira: "nafy",
@@ -732,6 +781,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "nafy_4",
+        difficulty: 2,
         verb: "הוֹדִיעוּ!",
         sentence: "(אַתֶּם) הוֹדִיעוּ לְכָל הַתַּלְמִידִים עַל שִׁנּוּי הַמּוֹעֵד!",
         gzira: "nafy",
@@ -745,6 +795,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "nafy_5",
+        difficulty: 3,
         verb: "שֵׁב!",
         sentence: "(אַתָּה) שֵׁב כָּאן לְיָדִי עַד שֶׁהַמּוֹרֶה יַגִּיעַ!",
         gzira: "nafy",
@@ -758,6 +809,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "nafy_6",
+        difficulty: 3,
         verb: "רֵד!",
         sentence: "(אַתָּה) רֵד מֵהַסֻּלָּם בִּזְהִירוּת רַבָּה!",
         gzira: "nafy",
@@ -771,6 +823,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "nafy_7",
+        difficulty: 2,
         verb: "מוֹבִילִים",
         sentence: "(הֵם) מוֹבִילִים אֶת מַסַּע הַהַסְבָּרָה הַחֲדָשׁ.",
         gzira: "nafy",
@@ -784,6 +837,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "nafy_8",
+        difficulty: 3,
         verb: "תּוֹצִיאִי",
         sentence: "(אַתְּ) תּוֹצִיאִי אֶת הַדַּפִּים מֵהַתִּיק כְּדֵי שֶׁנַּתְחִיל.",
         gzira: "nafy",
@@ -804,6 +858,7 @@ const VERBS_DATABASE = [
     // שורשי יו"ד (6 המיוחדים):
     {
         id: "naavy_yod_1",
+        difficulty: 2,
         verb: "יָשִׁירוּ",
         sentence: "(הֵם) יָשִׁירוּ בַּמַּקְהֵלָה שִׁיר מְרַגֵּשׁ בִּמְיֻחָד.",
         gzira: "naavy",
@@ -817,6 +872,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "naavy_yod_2",
+        difficulty: 3,
         verb: "רַבְתֶּם",
         sentence: "(אַתֶּם) רַבְתֶּם עַל דָּבָר קָטָן וַחֲסַר חֲשִׁיבוּת.",
         gzira: "naavy",
@@ -831,6 +887,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "naavy_yod_3",
+        difficulty: 3,
         verb: "שִׂימִי!",
         sentence: "(אַתְּ) שִׂימִי לֵב לְכָל שְׁאֵלָה בַּמִּבְחָן!",
         gzira: "naavy",
@@ -845,6 +902,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "naavy_yod_4",
+        difficulty: 3,
         verb: "נָשִׂיחַ",
         sentence: "(אֲנַחְנוּ) נָשִׂיחַ בְּנֹעַם וּבְכָבוֹד הֲדָדִי.",
         gzira: "naavy",
@@ -858,6 +916,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "naavy_yod_5",
+        difficulty: 3,
         verb: "יָגִיל",
         sentence: "(הוּא) יָגִיל וְיִשְׂמַח בְּהֶשֵּׂגָיו הַיָּפִים.",
         gzira: "naavy",
@@ -872,6 +931,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "naavy_yod_6",
+        difficulty: 3,
         verb: "הֵקִיא",
         sentence: "(הוּא) הֵקִיא לְאַחַר שֶׁאָכַל מָזוֹן מְקֻלְקָל.",
         gzira: "naavy",
@@ -887,6 +947,7 @@ const VERBS_DATABASE = [
     // שורשי ו"ו (כל שאר השורשים בנע"ו/י חייבים להיכתב עם ו'):
     {
         id: "naavy_vav_1",
+        difficulty: 1,
         verb: "הֵקַמְנוּ",
         sentence: "(אֲנַחְנוּ) הֵקַמְנוּ מֵיזָם חֶבְרָתִי חָדָשׁ בְּבֵית הַסֵּפֶר.",
         gzira: "naavy",
@@ -900,6 +961,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "naavy_vav_2",
+        difficulty: 2,
         verb: "מְבִינָה",
         sentence: "(הִיא) מְבִינָה אֶת הַכַּוָּנָה הָעֲמֻקָּה שֶׁבַּשִּׁיר.",
         gzira: "naavy",
@@ -913,6 +975,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "naavy_vav_3",
+        difficulty: 2,
         verb: "רוּצוּ!",
         sentence: "(אַתֶּם) רוּצוּ מַהֵר כְּדֵי לֹא לְאַחֵר לַהַסָּעָה!",
         gzira: "naavy",
@@ -926,6 +989,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "naavy_vav_4",
+        difficulty: 1,
         verb: "קוּם!",
         sentence: "(אַתָּה) קוּם בַּבֹּקֶר בְּחִיּוּךְ וְצֵא לַדֶּרֶךְ!",
         gzira: "naavy",
@@ -939,6 +1003,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "naavy_vav_5",
+        difficulty: 2,
         verb: "נָסוֹג",
         sentence: "(הוּא) נָסוֹג מֵעֶמְדָּתוֹ בְּעִקְבוֹת הַנְּתוּנִים הַחֲדָשִׁים.",
         gzira: "naavy",
@@ -954,6 +1019,7 @@ const VERBS_DATABASE = [
     },
     {
         id: "naavy_vav_6",
+        difficulty: 2,
         verb: "תָּשׁוּבִי",
         sentence: "(אַתְּ) תָּשׁוּבִי לְבֵיתֵךְ לִפְנֵי שֶׁתֵּרֵד הַחֲשֵׁכָה.",
         gzira: "naavy",
@@ -987,7 +1053,9 @@ const TENSES_LIST = [
 
 const PERSONS_LIST = [
     { id: "מדבר", name: "מדבר" },
+    { id: "מדברת", name: "מדברת" },
     { id: "מדברים", name: "מדברים" },
+    { id: "מדברות", name: "מדברות" },
     { id: "נוכח", name: "נוכח" },
     { id: "נוכחת", name: "נוכחת" },
     { id: "נוכחים", name: "נוכחים" },

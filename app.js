@@ -8,6 +8,10 @@ const gameState = {
     studentName: "",
     mode: "diagnostic", // 'diagnostic', 'adaptive', 'drill', 'speed'
     selectedGziraFilter: "all",
+    selectedGziraFilters: ["shlemim", "merubaim"],
+    difficulty: 1, // 1: יסודות (קל), 2: בינוני, 3: בגרות (מתקדם)
+    consecutiveCorrect: 0,
+    consecutiveMistakes: 0,
     
     // מעקב אחר התקדמות
     currentQuestionIndex: 0,
@@ -161,6 +165,89 @@ function matchFlexibleHebrew(userWord, targetWord, alternateList = []) {
     return false;
 }
 
+/**
+ * התאמת גוף חכמה (כולל תמיכה במדבר/מדברת ובמדברים/מדברות)
+ */
+function isPersonMatch(userPerson, targetPerson, tense) {
+    if (!userPerson) return false;
+    if (userPerson === targetPerson) return true;
+
+    // בעבר ובעתיד גוף ראשון יחיד מתאים גם למדבר וגם למדברת (למשל: סִדַּרְתִּי, אֶשְׁמֹר)
+    if ((tense === "עבר" || tense === "עתיד") &&
+        (targetPerson === "מדבר" || targetPerson === "מדברת") &&
+        (userPerson === "מדבר" || userPerson === "מדברת")) {
+        return true;
+    }
+
+    // בעבר ובעתיד גוף ראשון רבים מתאים גם למדברים וגם למדברות (למשל: הִתְכַּתַּבְנוּ, נִשְׁמֹר)
+    if ((tense === "עבר" || tense === "עתיד") &&
+        (targetPerson === "מדברים" || targetPerson === "מדברות") &&
+        (userPerson === "מדברים" || userPerson === "מדברות")) {
+        return true;
+    }
+
+    // בבינוני (בינוני יחידה מתאים לנסתרת / מדברת / נוכחת; רבים מתאים לנסתרים / מדברים / נוכחים)
+    if (tense === "בינוני") {
+        if (targetPerson === "נסתרת" && (userPerson === "מדברת" || userPerson === "נוכחת" || userPerson === "נסתרת")) {
+            return true;
+        }
+        if (targetPerson === "נסתר" && (userPerson === "מדבר" || userPerson === "נוכח" || userPerson === "נסתר")) {
+            return true;
+        }
+        if (targetPerson === "נסתרות" && (userPerson === "מדברות" || userPerson === "נוכחות" || userPerson === "נסתרות")) {
+            return true;
+        }
+        if (targetPerson === "נסתרים" && (userPerson === "מדברים" || userPerson === "נוכחים" || userPerson === "נסתרים")) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+// -----------------------------------------------------------------------------
+// ניהול רמות קושי דינמיות
+// -----------------------------------------------------------------------------
+
+function getDifficultyLabel(diff) {
+    if (diff === 1) return "יסודות (רמה 1)";
+    if (diff === 2) return "בינוני (רמה 2)";
+    return "בגרות (רמה 3)";
+}
+
+function getDifficultyIcon(diff) {
+    if (diff === 1) return "🌱";
+    if (diff === 2) return "⚡";
+    return "🔥";
+}
+
+function updateDifficultyUI() {
+    const diff = gameState.difficulty || 1;
+    const icon = getDifficultyIcon(diff);
+    const label = getDifficultyLabel(diff);
+
+    const hudText = document.getElementById("hud-difficulty-text");
+    if (hudText) hudText.textContent = label;
+
+    const hudIcon = document.getElementById("hud-difficulty-icon");
+    if (hudIcon) hudIcon.textContent = icon;
+
+    const stageBadge = document.getElementById("play-difficulty-badge");
+    if (stageBadge) {
+        stageBadge.textContent = `${icon} ${label}`;
+    }
+}
+
+function showLevelToast(msg) {
+    const toast = document.getElementById("level-toast");
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.classList.add("show");
+    setTimeout(() => {
+        toast.classList.remove("show");
+    }, 3200);
+}
+
 // -----------------------------------------------------------------------------
 // אתחול האפליקציה וטעינת נתונים
 // -----------------------------------------------------------------------------
@@ -188,6 +275,12 @@ function loadSavedState() {
             if (data.categoryStats) {
                 gameState.categoryStats = Object.assign(gameState.categoryStats, data.categoryStats);
             }
+            if (data.difficulty) {
+                gameState.difficulty = data.difficulty;
+            }
+            if (data.selectedGziraFilters && Array.isArray(data.selectedGziraFilters)) {
+                gameState.selectedGziraFilters = data.selectedGziraFilters;
+            }
         }
     } catch (e) {
         console.error("Failed to load saved state", e);
@@ -199,6 +292,7 @@ function loadSavedState() {
         const banner = document.getElementById("welcome-banner-name");
         if (banner) banner.textContent = gameState.studentName;
     }
+    updateDifficultyUI();
 }
 
 function saveState() {
@@ -207,6 +301,8 @@ function saveState() {
             studentName: gameState.studentName,
             score: gameState.score,
             maxStreak: gameState.maxStreak,
+            difficulty: gameState.difficulty,
+            selectedGziraFilters: gameState.selectedGziraFilters,
             gziraStats: gameState.gziraStats,
             categoryStats: gameState.categoryStats
         };
@@ -320,22 +416,41 @@ function startAdaptiveMode() {
     pickNextAdaptiveVerb();
 }
 
-function startDrillMode(gziraId) {
+function startDrillMode(gziraIds) {
     gameState.mode = "drill";
-    gameState.selectedGziraFilter = gziraId;
+    if (Array.isArray(gziraIds)) {
+        gameState.selectedGziraFilters = gziraIds;
+    } else if (gziraIds) {
+        gameState.selectedGziraFilters = [gziraIds];
+    }
     showScreen("play-screen");
     pickNextDrillVerb();
 }
 
 function pickNextDrillVerb() {
-    const available = VERBS_DATABASE.filter(v => v.gzira === gameState.selectedGziraFilter);
-    const chosen = available[Math.floor(Math.random() * available.length)];
-    loadQuestion(chosen, `אימון ממוקד: ${GZAROT_INFO[gameState.selectedGziraFilter].name}`);
+    const filters = (gameState.selectedGziraFilters && gameState.selectedGziraFilters.length > 0)
+        ? gameState.selectedGziraFilters
+        : Object.keys(GZAROT_INFO);
+
+    const available = VERBS_DATABASE.filter(v => filters.includes(v.gzira));
+    if (available.length === 0) return;
+
+    // התאמה לרמת הקושי הנוכחית של התלמיד!
+    const diffMatches = available.filter(v => v.difficulty === gameState.difficulty);
+    const pool = (diffMatches.length > 0) ? diffMatches : available;
+
+    // נשתדל לא לחזור על הפועל הקודם
+    const filtered = pool.filter(v => !gameState.currentVerb || v.id !== gameState.currentVerb.id);
+    const chosen = (filtered.length > 0 ? filtered : pool)[Math.floor(Math.random() * (filtered.length > 0 ? filtered.length : pool.length))];
+
+    const names = filters.map(k => GZAROT_INFO[k]?.name || k).join(", ");
+    loadQuestion(chosen, `אימון ממוקד • ${names}`);
 }
 
 /**
  * מנוע בחירת שאלות אדפטיבי חכם:
- * מקצה הסתברות גבוהה יותר (משקל כבד יותר) לגזרות שבהן אחוז ההצלחה של התלמיד נמוך יותר!
+ * 1. מקצה הסתברות גבוהה יותר לגזרות שבהן אחוז ההצלחה של התלמיד נמוך יותר.
+ * 2. מתאים את הפועל לרמת הקושי הדינמית של התלמיד.
  */
 function pickNextAdaptiveVerb() {
     const gzarotKeys = Object.keys(GZAROT_INFO);
@@ -354,7 +469,7 @@ function pickNextAdaptiveVerb() {
         weights.push({ key, weight });
     });
 
-    // הגרלה ממושקלת
+    // הגרלה ממושקלת לבחירת הגזרה
     const totalWeight = weights.reduce((sum, w) => sum + w.weight, 0);
     let rand = Math.random() * totalWeight;
     let chosenGzira = weights[0].key;
@@ -368,11 +483,15 @@ function pickNextAdaptiveVerb() {
     }
 
     const availableVerbs = VERBS_DATABASE.filter(v => v.gzira === chosenGzira);
-    // נשתדל לא לחזור על הפועל הקודם
-    const filtered = availableVerbs.filter(v => !gameState.currentVerb || v.id !== gameState.currentVerb.id);
-    const chosen = (filtered.length > 0 ? filtered : availableVerbs)[Math.floor(Math.random() * (filtered.length > 0 ? filtered.length : availableVerbs.length))];
 
-    const currentGziraMastery = getGziraMasteryPercent(chosenGzira);
+    // התאמה דינמית לרמת הקושי של התלמיד
+    const diffMatches = availableVerbs.filter(v => v.difficulty === gameState.difficulty);
+    const pool = (diffMatches.length > 0) ? diffMatches : availableVerbs;
+
+    // נשתדל לא לחזור על הפועל הקודם
+    const filtered = pool.filter(v => !gameState.currentVerb || v.id !== gameState.currentVerb.id);
+    const chosen = (filtered.length > 0 ? filtered : pool)[Math.floor(Math.random() * (filtered.length > 0 ? filtered.length : pool.length))];
+
     loadQuestion(chosen, `אימון מותאם אישית • שאלה ${gameState.totalAnswered + 1}`);
 }
 
@@ -396,6 +515,8 @@ function loadQuestion(verbObj, headerText) {
     if (targetVerb) targetVerb.textContent = verbObj.verb;
     const targetSent = document.getElementById("target-sentence-display");
     if (targetSent) targetSent.textContent = verbObj.sentence;
+
+    updateDifficultyUI();
 
     // התמקדות ראשונית בתיבת השורש
     setTimeout(() => {
@@ -501,8 +622,8 @@ function checkCurrentAnswers() {
         results.tense = true;
     }
 
-    // 4. בדיקת גוף
-    if (userPerson === verb.person) {
+    // 4. בדיקת גוף (כולל תמיכה במדבר/מדברת ובמדברים/מדברות)
+    if (isPersonMatch(userPerson, verb.person, verb.tense)) {
         results.person = true;
     }
 
@@ -543,6 +664,30 @@ function checkCurrentAnswers() {
         }
     } else {
         gameState.streak = 0;
+    }
+
+    // עדכון רמת קושי דינמית בהתאם להצלחת התלמיד
+    if (correctCount >= 5) {
+        gameState.consecutiveCorrect++;
+        gameState.consecutiveMistakes = 0;
+        if (gameState.consecutiveCorrect >= 2 && gameState.difficulty < 3) {
+            gameState.difficulty++;
+            gameState.consecutiveCorrect = 0;
+            sounds.playLevelUp();
+            triggerConfetti();
+            showLevelToast(`🎉 עליית רמה! עלית לדרגת ${getDifficultyLabel(gameState.difficulty)}!`);
+        }
+    } else if (correctCount <= 3) {
+        gameState.consecutiveMistakes++;
+        gameState.consecutiveCorrect = 0;
+        if (gameState.consecutiveMistakes >= 2 && gameState.difficulty > 1) {
+            gameState.difficulty--;
+            gameState.consecutiveMistakes = 0;
+            showLevelToast(`💪 חוזרים לרמת ${getDifficultyLabel(gameState.difficulty)} לחיזוק היסודות`);
+        }
+    } else {
+        gameState.consecutiveCorrect = 0;
+        gameState.consecutiveMistakes = 0;
     }
 
     // עדכון סטטיסטיקת גזרה
@@ -789,8 +934,11 @@ function showDiagnosticSummaryScreen() {
 // -----------------------------------------------------------------------------
 
 function updateHeaderStats() {
-    document.getElementById("hud-score").textContent = gameState.score;
-    document.getElementById("hud-streak").textContent = gameState.streak;
+    const hudScore = document.getElementById("hud-score");
+    if (hudScore) hudScore.textContent = gameState.score;
+    const hudStreak = document.getElementById("hud-streak");
+    if (hudStreak) hudStreak.textContent = gameState.streak;
+    updateDifficultyUI();
 }
 
 // -----------------------------------------------------------------------------
@@ -870,6 +1018,32 @@ function setupEventListeners() {
             soundToggle.title = isEnabled ? "השתק צלילים" : "הפעל צלילים";
         });
     }
+
+    // בחירת כל הגזרות במודאל אימון
+    document.getElementById("drill-select-all-btn")?.addEventListener("click", () => {
+        sounds.playClick();
+        Object.keys(GZAROT_INFO).forEach(k => selectedDrillGzarot.add(k));
+        updateDrillModalUI();
+    });
+
+    // ניקוי בחירת הגזרות במודאל אימון
+    document.getElementById("drill-clear-all-btn")?.addEventListener("click", () => {
+        sounds.playClick();
+        selectedDrillGzarot.clear();
+        updateDrillModalUI();
+    });
+
+    // התחלת אימון בגזרות שנבחרו
+    document.getElementById("start-drill-selection-btn")?.addEventListener("click", () => {
+        if (selectedDrillGzarot.size === 0) {
+            alert("נא לבחור לפחות גזרה אחת לתרגול!");
+            return;
+        }
+        sounds.playClick();
+        const modal = document.getElementById("drill-modal");
+        if (modal) modal.classList.remove("open");
+        startDrillMode(Array.from(selectedDrillGzarot));
+    });
 }
 
 function openModal(modalId) {
@@ -877,32 +1051,82 @@ function openModal(modalId) {
     if (modal) modal.classList.add("open");
 }
 
+let selectedDrillGzarot = new Set(["shlemim", "merubaim"]);
+
+function updateDrillModalUI() {
+    const startBtn = document.getElementById("start-drill-selection-btn");
+    const count = selectedDrillGzarot.size;
+    if (startBtn) {
+        startBtn.textContent = `התחל אימון בגזרות שנבחרו (${count} גזרות) ➜`;
+        startBtn.disabled = (count === 0);
+        startBtn.style.opacity = (count === 0) ? "0.5" : "1";
+    }
+
+    document.querySelectorAll(".drill-gzira-card").forEach(card => {
+        const key = card.dataset.gzira;
+        const isSelected = selectedDrillGzarot.has(key);
+        if (isSelected) {
+            card.classList.add("selected");
+            const chk = card.querySelector(".select-checkbox");
+            if (chk) chk.textContent = "✓";
+        } else {
+            card.classList.remove("selected");
+            const chk = card.querySelector(".select-checkbox");
+            if (chk) chk.textContent = "";
+        }
+    });
+}
+
 function populateDrillModal() {
     const container = document.getElementById("drill-gzarot-grid");
+    if (!container) return;
     container.innerHTML = "";
+
+    // וידוא בחירה ראשונית אם הסט ריק
+    if (selectedDrillGzarot.size === 0) {
+        if (gameState.selectedGziraFilters && gameState.selectedGziraFilters.length > 0) {
+            gameState.selectedGziraFilters.forEach(k => selectedDrillGzarot.add(k));
+        } else {
+            selectedDrillGzarot.add("shlemim");
+            selectedDrillGzarot.add("merubaim");
+        }
+    }
 
     Object.keys(GZAROT_INFO).forEach(key => {
         const g = GZAROT_INFO[key];
         const mastery = getGziraMasteryPercent(key);
-        const card = document.createElement("button");
-        card.type = "button";
-        card.className = "drill-gzira-card";
+        const isSelected = selectedDrillGzarot.has(key);
+
+        const card = document.createElement("div");
+        card.className = "drill-gzira-card" + (isSelected ? " selected" : "");
+        card.dataset.gzira = key;
         card.style.borderColor = g.color;
         card.innerHTML = `
             <div class="drill-card-top">
-                <span class="badge" style="background: ${g.color}20; color: ${g.color};">${g.name}</span>
+                <div class="drill-card-top-right">
+                    <span class="select-checkbox">${isSelected ? "✓" : ""}</span>
+                    <span class="badge" style="background: ${g.color}20; color: ${g.color};">${g.name}</span>
+                </div>
                 <span class="mastery-badge">${mastery}%</span>
             </div>
             <h4>${g.badge}</h4>
             <p>${g.description}</p>
         `;
+
         card.addEventListener("click", () => {
             sounds.playClick();
-            document.getElementById("drill-modal").classList.remove("open");
-            startDrillMode(key);
+            if (selectedDrillGzarot.has(key)) {
+                selectedDrillGzarot.delete(key);
+            } else {
+                selectedDrillGzarot.add(key);
+            }
+            updateDrillModalUI();
         });
+
         container.appendChild(card);
     });
+
+    updateDrillModalUI();
 }
 
 // -----------------------------------------------------------------------------

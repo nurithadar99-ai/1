@@ -14,6 +14,7 @@
 </head>
 <body>
     <canvas id="confetti-canvas"></canvas>
+    <div id="level-toast" class="level-toast"></div>
 
     <!-- סרגל עליון -->
     <header class="app-header">
@@ -36,6 +37,10 @@
                     <span class="hud-icon">🔥</span>
                     <span id="hud-streak" class="hud-value">0</span>
                     <span class="hud-label">רצף</span>
+                </div>
+                <div class="hud-pill difficulty-pill" id="hud-difficulty-pill" title="רמת קושי דינמית המותאמת להצלחה שלך">
+                    <span id="hud-difficulty-icon">🌱</span>
+                    <span id="hud-difficulty-text">רמה 1: קל</span>
                 </div>
                 <button id="sound-toggle-btn" class="icon-btn" title="השתק/הפעל צלילים">🔊</button>
                 <button id="open-rules-modal-btn" class="rules-btn" title="מדריך כללי הבגרות">
@@ -121,6 +126,7 @@
                 <div class="stage-bar">
                     <div class="stage-info">
                         <span id="question-stage-indicator" class="stage-title">שאלה בתרגול</span>
+                        <span id="play-difficulty-badge" class="difficulty-stage-badge">🌱 יסודות (רמה 1)</span>
                     </div>
                     <button class="btn-go-home text-btn" title="חזרה לתפריט הראשי">✕ יציאה לתפריט</button>
                 </div>
@@ -293,13 +299,22 @@
     <div id="drill-modal" class="modal-backdrop">
         <div class="modal-card">
             <div class="modal-header">
-                <h3>🎯 בחירת גזרה לתרגול ממוקד</h3>
+                <h3>🎯 בחירת גזרות לתרגול ממוקד</h3>
                 <button class="modal-close-btn" title="סגור">✕</button>
             </div>
             <p class="modal-intro">
-                בחרו את הגזרה שתרצו לתרגל כדי לחזק את המיומנות והביטחון שלכם בה:
+                בחרו גזרה אחת או יותר (למשל: שְׁלֵמִים וּמְרֻבָּעִים) לתרגול ממוקד:
             </p>
+            <div class="drill-selection-tools">
+                <button type="button" id="drill-select-all-btn" class="chip-btn small">בחר הכל ✓</button>
+                <button type="button" id="drill-clear-all-btn" class="chip-btn small">נקה בחירה ✕</button>
+            </div>
             <div id="drill-gzarot-grid" class="gzarot-selection-grid"></div>
+            <div class="modal-footer" style="margin-top: 1.5rem; text-align: center;">
+                <button type="button" id="start-drill-selection-btn" class="btn btn-primary btn-large" style="width: 100%;">
+                    התחל אימון בגזרות שנבחרו (1 גזרות) ➜
+                </button>
+            </div>
         </div>
     </div>
 
